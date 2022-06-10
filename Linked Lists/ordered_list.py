@@ -59,13 +59,13 @@ LINKED LIST CLASS (ORDERED)
         this is the opposite of prepend, which adds node to the beginning of the list.
 
         -create a new node
-        -create a reference (current) that starts at the head of the node
-        -create a reference (previous), which will be initialized to None
-        -while current is not None:
-            set previous to current
-            set current to the next node
-        -point the new node to current
-        -point previous node to new node
+        -create a reference (current), set as head
+        if current is None (empty list):
+            set head as new node
+        else:
+            while current.next is not None:
+                set current as current.next
+            point current.next to new node.    
 
     4. insert(item, index):
         inserts at a designated index.
