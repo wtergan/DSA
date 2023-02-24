@@ -71,7 +71,7 @@ class LinkedList:
 def main():
     find_middle = LinkedList()
 
-    for x in range(5):
+    for x in range(6):
         find_middle.add(random.randint(0, 10))
 
     find_middle.print_fn()
