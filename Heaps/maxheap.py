@@ -228,10 +228,25 @@ def test4():
     maxheap.insertion(10) # Lets put 10 back into the heap.
     print(maxheap)
     assert maxheap.remove_max() == 50
-    print(maxheap) #Should return list "[40, 30, 20, 10]"
+    print(maxheap) # Should return list "[40, 30, 20, 10]"
 
 def test5():
     """Tests when the max heap contain multiple elements, and some elements are duplicated."""
     maxheap = MaxHeap()
     
-test4()
+    maxheap.insertion(30)
+    maxheap.insertion(30)
+    maxheap.insertion(40)
+    maxheap.insertion(60)
+    maxheap.insertion(10)
+    print(maxheap) # Should return list "[60, 40, 30, 30, 10]"
+    assert len(maxheap) == 5
+    assert maxheap.get_max() == 60
+    assert maxheap.get_min() == 10
+    assert maxheap.remove_min() == 10
+    print(maxheap) # Should return list "[60, 40, 30, 30]"
+    maxheap.insertion(10) # Lets put 10 back into the heap.
+    print(maxheap)
+    assert maxheap.remove_max() == 60
+    print(maxheap) # Should return list "[40, 30, 30, 10]"
+test5()
