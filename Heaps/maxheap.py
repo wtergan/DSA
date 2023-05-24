@@ -1,14 +1,10 @@
 """
-    Implementation of _ Heap Data Structure.
+    Implementation of Max Heap Data Structure.
         -A specialized tree-based data structure in which the tree is a complete binary
          tree.
-        -Two types of heaps:
-            --Max Heap: in which, for any given root node, the value of root node must 
-              be greatest among all of its child nodes, and the same rule must apply
-              for its left and right sub-tree as well.
-            --Min Heap: in which, for any given root node, the value of the root node 
-              must be least among all of its child nodes, and the same rule must apply 
-              for its left and right sub-tree as well.
+        -Max Heap: in which, for any given root node, the value of root node must 
+          be greatest among all of its child nodes, and the same rule must apply
+          for its left and right sub-tree as well.
         -The process to rearrange the elements to maintain the property of heap data is 
          called "heapify". Its done when a certain node creates an imbalance in the heap
          due to some of the operations on that node. 
@@ -32,7 +28,6 @@
             WORST: O(N)
                 --Where N is the number of elements in the heap.
 """
-import time
 
 class MaxHeap:
     """Simple Max Heap class.
@@ -48,6 +43,7 @@ class MaxHeap:
         return str(self.maxheap)
     
     def __len__(self):
+        # Returns the length of the max heap.
         return len(self.maxheap)
     
     def parent(self, idx):
@@ -62,31 +58,6 @@ class MaxHeap:
         # Returns the index of the right child node, given the index 'idx'.
         return 2 * idx + 2
     
-    def insertion(self, value):
-        """Insertion of a new value into the Max Heap. O(logN) time complexity for all cases.
-
-           -It appends the value into the maxheap array, followed by getting the index of that newly inserted value.
-           -Then it calls the up_heapify function to satisfy the max heap property, since the max element has to
-            go its position if the value is greater than its preceeding values in the heap.
-        """
-        self.maxheap.append(value)
-        idx = len(self.maxheap) - 1
-        # Call the up_heapify method to restore the max heap propety.
-        self.up_heapify(idx)
-    
-    def deletion(self, value):
-        """Deletion of the given value in the Max Heap. O(logN) time complexity for all cases.
-        
-          -Get the index of the value given, setting that as the last element in the heap, then popping it.
-          -We must then max heapify the value at given index.
-        """
-        # Finding the element to be deleted and then swapping it with the last element in the heap. Then last element
-        # can then be removed from the heap and the tree can be heapified.
-        idx = self.maxheap.index(value)
-        self.maxheap[idx] = self.maxheap[-1]
-        self.maxheap.pop()
-        self.max_heapify(idx)
-
     def max_heapify(self, idx):
         """Method responsibe for restoring the property of the Max Heap.
 
@@ -96,8 +67,8 @@ class MaxHeap:
           -It then checks whether the right child's value is greater than the largest known node's value.
           -If the largest value if not at the current node('idx') it means that one of the children has that
            largest value. Thus, we swap the current node with the larger child.
-          -After swapping, we call the methiod recursively on the subtree where the larger child existed
-          -(Moving elements down the heap thats smaller than its child nodes.)
+          -After swapping, we call the methiod recursively on the subtree where the larger child existed.
+          -(Moving current nodes down the heap thats smaller than its child nodes.)
         """
         left = self.left_child(idx)
         right = self.right_child(idx)
@@ -122,6 +93,30 @@ class MaxHeap:
         while idx != 0 and self.maxheap[self.parent(idx)] < self.maxheap[idx]: 
             self.maxheap[idx], self.maxheap[self.parent(idx)] = self.maxheap[self.parent(idx)], self.maxheap[idx]
             idx = self.parent(idx)
+
+    def insertion(self, value):
+        """Insertion of a new value into the Max Heap. O(logN) time complexity for all cases.
+
+           -It appends the value into the maxheap array, followed by getting the index of that newly inserted value.
+           -Then it calls the up_heapify function to satisfy the max heap property.
+        """
+        self.maxheap.append(value)
+        idx = len(self.maxheap) - 1
+        # Call the up_heapify method to restore the max heap propety.
+        self.up_heapify(idx)
+    
+    def deletion(self, value):
+        """Deletion of the given value in the Max Heap. O(logN) time complexity for all cases.
+        
+          -Get the index of the value given, setting that as the last element in the heap, then popping it.
+          -We must then max heapify the value at given index.
+        """
+        # Finding the element to be deleted and then swapping it with the last element in the heap. Then last element
+        # can then be removed from the heap and the tree can be heapified.
+        idx = self.maxheap.index(value)
+        self.maxheap[idx] = self.maxheap[-1]
+        self.maxheap.pop()
+        self.max_heapify(idx)
 
     def remove_max(self):
         """Removal of the max value in the Max Heap. O(logN) time complexity for most cases, O(1) if only one element in heap.
@@ -167,86 +162,3 @@ class MaxHeap:
         """Gets the minimum element for the Max Heap. O(N) time complexity for all cases."""
         return min(self.maxheap) if len(self.maxheap) !=0 else "Empty max heap."
     
-def test1():
-    """Tests when the max heap is empty."""
-    maxheap = MaxHeap()
-
-    print(maxheap) # Should return empty list "[]"
-    assert maxheap.get_max() == "Empty max heap."
-    assert maxheap.get_min() == "Empty max heap."
-    assert maxheap.remove_min() == "Empty max heap."
-    assert maxheap.remove_max() == "Empty max heap."
-    assert len(maxheap) == 0
-
-def test2():
-    """Tests when the max heap contains only one element."""
-    maxheap = MaxHeap()
-
-    maxheap.insertion(10)
-    print(maxheap) # Should return list "[10]"
-    assert maxheap.get_max() == 10
-    assert maxheap.get_min() == 10
-    assert maxheap.remove_min() == 10
-    assert maxheap.remove_max() == "Empty max heap."
-    assert len(maxheap) == 0
-
-def test3():
-    """Tests when the max heap contains multiple elements, but inserted into the heap in ascending order."""
-    maxheap = MaxHeap()
-
-    maxheap.insertion(50)
-    maxheap.insertion(40)
-    maxheap.insertion(30)
-    maxheap.insertion(20)
-    maxheap.insertion(10)
-    print(maxheap) # Should return list "[50, 40, 30, 20, 10]"
-    assert len(maxheap) == 5
-    assert maxheap.get_max() == 50
-    assert maxheap.get_min() == 10
-    assert maxheap.remove_min() == 10
-    print(maxheap) # Should return list "[50, 40, 30, 20]"
-    maxheap.insertion(10) # Lets put 10 back into the heap.
-    print(maxheap)
-    assert maxheap.remove_max() == 50
-    print(maxheap) #Should return list "[40, 30, 20, 10]"
-
-def test4():
-    """Tests when the max heap contains multiple elements, but inserted into the heap in descending order."""
-    maxheap = MaxHeap()
-
-    maxheap.insertion(10)
-    maxheap.insertion(20)
-    maxheap.insertion(30)
-    maxheap.insertion(40)
-    maxheap.insertion(50)
-    print(maxheap) # Should return list "[50, 40, 30, 20, 10]"
-    assert len(maxheap) == 5
-    assert maxheap.get_max() == 50
-    assert maxheap.get_min() == 10
-    assert maxheap.remove_min() == 10
-    print(maxheap) # Should return list "[50, 40, 30, 20]"
-    maxheap.insertion(10) # Lets put 10 back into the heap.
-    print(maxheap)
-    assert maxheap.remove_max() == 50
-    print(maxheap) # Should return list "[40, 30, 20, 10]"
-
-def test5():
-    """Tests when the max heap contain multiple elements, and some elements are duplicated."""
-    maxheap = MaxHeap()
-    
-    maxheap.insertion(30)
-    maxheap.insertion(30)
-    maxheap.insertion(40)
-    maxheap.insertion(60)
-    maxheap.insertion(10)
-    print(maxheap) # Should return list "[60, 40, 30, 30, 10]"
-    assert len(maxheap) == 5
-    assert maxheap.get_max() == 60
-    assert maxheap.get_min() == 10
-    assert maxheap.remove_min() == 10
-    print(maxheap) # Should return list "[60, 40, 30, 30]"
-    maxheap.insertion(10) # Lets put 10 back into the heap.
-    print(maxheap)
-    assert maxheap.remove_max() == 60
-    print(maxheap) # Should return list "[40, 30, 30, 10]"
-test5()
